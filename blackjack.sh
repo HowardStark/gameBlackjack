@@ -76,14 +76,16 @@ function hitHand() {
     fi
 }
 
-function checkSum() {
+function calcSum() {
     if [[ $# == 1 && $1 =~ ^-?[0-9]+$ ]]
     then
-        cards=(${PLAYERS[$1]//|/})
-
-        NAME=${MYVAR%:*}  # get the part before the colon
-        NAME=${NAME##*/}  # get the part after the last slash
-        echo $NAME
+        sum=0
+        cards=(${PLAYERS[$1]//|/ })
+        for (( i=0;i<${#cards[@]};i++ ))
+        do
+            sum=$((sum+${cards[i]%,*}))
+        done
+        echo $sum
     elif [[ $# -gt 1 || $# -lt 1 ]]
     then
         echo "Invalid hit argument."
@@ -103,3 +105,4 @@ start
 echo "${PLAYERS[*]}"
 hitHand 0
 echo "${PLAYERS[*]}"
+calcSum 0
