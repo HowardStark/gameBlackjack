@@ -18,12 +18,12 @@ do
         p)
             if [[ $OPTARG =~ ^-?[0-9]+$ ]]
             then
-                if (( $OPTARG>12 || $OPTARG<1 ))
+                if (( OPTARG>12 || OPTARG<1 ))
                 then
                     echo "Maximum of 12 players and minimum of 1 is required." >&2
                     exit 1
                 else
-                    for (( i=0; i<$OPTARG; i++ ))
+                    for (( i=0; i<OPTARG; i++ ))
                     do
                         PLAYERS[$i]="" >&2
                     done
@@ -50,7 +50,7 @@ function buildDeck() {
         for (( c=0; c <= 3; c++))
         do
             DECK[$counter]="$i,$c"
-            counter=$(($counter+1))
+            counter=$((counter+1))
         done
     done
 }
@@ -65,6 +65,14 @@ function buildHand() {
     echo "$(dealCard) | $(dealCard)"
 }
 
+function hit() {
+    if [[ $# == 1 && $1 =~ ^-?[0-9]+$ ]]
+    then
+        PLAYERS[$1]="${PLAYERS[$1]}| $(dealCard)"
+    fi
+
+}
+
 function start() {
     buildDeck
     for (( i=0; i<${#PLAYERS[@]}; i++ ))
@@ -74,4 +82,6 @@ function start() {
 }
 
 start
-echo ${PLAYERS[*]}
+echo "${PLAYERS[*]}"
+hit 1
+echo "${PLAYERS[*]}"
