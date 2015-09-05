@@ -103,6 +103,17 @@ function start() {
 
 start
 echo "${PLAYERS[*]}"
-hitHand 0
-echo "${PLAYERS[*]}"
-calcSum 0
+
+while read -rsn1 input
+do
+    if [ "$input" == "h" ]
+    then
+        hitHand 0
+        echo "${PLAYERS[*]}"
+        if [[ $(calcSum 0) -gt 21 ]]
+        then
+            echo "Busted!"
+            exit 1
+        fi
+    fi
+done
