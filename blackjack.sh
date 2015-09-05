@@ -62,15 +62,33 @@ function dealCard() {
 }
 
 function buildHand() {
-    echo "$(dealCard) | $(dealCard)"
+    echo "$(dealCard)|$(dealCard)"
 }
 
-function hit() {
+function hitHand() {
     if [[ $# == 1 && $1 =~ ^-?[0-9]+$ ]]
     then
-        PLAYERS[$1]="${PLAYERS[$1]}| $(dealCard)"
+        PLAYERS[$1]="${PLAYERS[$1]}|$(dealCard)"
+    elif [[ $# -gt 1 || $# -lt 1 ]]
+    then
+        echo "Invalid hit argument."
+        exit 1
     fi
+}
 
+function checkSum() {
+    if [[ $# == 1 && $1 =~ ^-?[0-9]+$ ]]
+    then
+        cards=(${PLAYERS[$1]//|/})
+
+        NAME=${MYVAR%:*}  # get the part before the colon
+        NAME=${NAME##*/}  # get the part after the last slash
+        echo $NAME
+    elif [[ $# -gt 1 || $# -lt 1 ]]
+    then
+        echo "Invalid hit argument."
+        exit 1
+    fi
 }
 
 function start() {
@@ -83,5 +101,5 @@ function start() {
 
 start
 echo "${PLAYERS[*]}"
-hit 1
+hitHand 0
 echo "${PLAYERS[*]}"
